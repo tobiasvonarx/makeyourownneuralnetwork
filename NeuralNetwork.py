@@ -4,6 +4,7 @@ import matplotlib.pyplot
 import scipy.misc
 import glob
 from scipy.special import expit as sigmoid
+from scipy.ndimage import rotate
 import os
 
 
@@ -100,7 +101,7 @@ if __name__ == "__main__":
     learning_rate = 0.1
 
     # how often to train -> epochs
-    epochs = 1
+    epochs = 10
 
     # training targets
     t = [0.5, 0.5, 0.5]
@@ -134,11 +135,15 @@ if __name__ == "__main__":
                 all_values = record.split(',')
                 # scale and shift the inputs
                 inputs = (numpy.asfarray(all_values[1:]) / 255.0 * 0.99) + 0.01
+                inputs_plus10 = rotate(inputs.reshape(28,28), 10.0, cval=0.01, order=1, reshape=False).reshape(784)
+                inputs_minus10 = rotate(inputs.reshape(28,28), -10.0, cval=0.01, order=1, reshape=False).reshape(784)
                 # create the target output values (all 0.01, except the desired label which is 0.99)
                 targets = numpy.zeros(output_nodes) + 0.01
                 # all_values[0] is the target label for this record
                 targets[int(all_values[0])] = 0.99
                 neuralNetwork.train(inputs, targets)
+                neuralNetwork.train(inputs_plus10, targets)
+                neuralNetwork.train(inputs_minus10, targets)
             print('training done for epoch ', e)
 
         wih, who = neuralNetwork.get_weights()
