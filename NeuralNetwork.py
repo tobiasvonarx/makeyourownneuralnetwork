@@ -1,6 +1,4 @@
 import numpy
-import scipy.special
-import matplotlib.pyplot
 import scipy.misc
 import glob
 from scipy.special import expit as sigmoid
