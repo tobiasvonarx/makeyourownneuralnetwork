@@ -6,7 +6,7 @@ from scipy.ndimage import rotate
 import os
 
 
-class deepFeedForward(object):
+class feedForward(object):
 
     # initialise the neural network
     def __init__(self, inputnodes, hiddennodes, outputnodes, learningrate, activation_function):
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     training_data_file.close()
 
     # create instance of neural network
-    neuralNetwork = deepFeedForward(input_nodes, hidden_nodes, output_nodes, learning_rate, sigmoid)
+    neuralNetwork = feedForward(input_nodes, hidden_nodes, output_nodes, learning_rate, sigmoid)
 
     # check if pre-trained weights are available
     mypath = os.path.dirname(os.path.realpath(__file__)) + '\\data'
