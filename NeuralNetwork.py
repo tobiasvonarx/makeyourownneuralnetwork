@@ -1,5 +1,5 @@
 import numpy
-import scipy.misc
+from scipy.misc import imread
 import glob
 from scipy.special import expit as sigmoid
 from scipy.ndimage import rotate
@@ -167,7 +167,7 @@ if __name__ == "__main__":
 
         # load image data from png files into an array
         print("loading ... ", image_file_name)
-        img_array = scipy.misc.imread(image_file_name, flatten=True)
+        img_array = imread(image_file_name, flatten=True)
 
         # reshape from 28x28 to list of 784 values, invert values
         img_data = 255.0 - img_array.reshape(784)
@@ -188,6 +188,8 @@ if __name__ == "__main__":
     # plot image
     # matplotlib.pyplot.imshow(our_own_dataset[item][1:].reshape(28, 28), cmap='Greys', interpolation='None')
 
+    print("\n")
+
     # correct answer is first value
     for item in items:
         correct_label = our_own_dataset[item][0]
@@ -200,7 +202,7 @@ if __name__ == "__main__":
 
         # the index of the highest value corresponds to the label
         label = numpy.argmax(outputs)
-        print("network says ", label)
+        print("network says ", label," with a probability of ",str(outputs[label]*100)[1:-1],"%")
         # append correct or incorrect to list
         if (label == correct_label):
             print("match!")
