@@ -5,7 +5,9 @@ from scipy.special import expit as sigmoid
 from scipy.ndimage import rotate
 import os
 
-
+"""
+Neural Network Class
+"""
 class feedForward(object):
 
     # initialise the neural network
@@ -88,7 +90,9 @@ class feedForward(object):
         self.wih = wih
         self.who = who
 
-
+"""
+Initialization and setup of the Neural Network
+"""
 if __name__ == "__main__":
     # number of input, hidden and output nodes
     input_nodes = 784
@@ -151,6 +155,50 @@ if __name__ == "__main__":
     else:
         neuralNetwork.set_weights(numpy.loadtxt(fname_wih), numpy.loadtxt(fname_who))
 
+    """
+    Test the Neural Network against 100 samples to find accuracy
+    """
+
+    test_data_file = open("mnist_dataset/mnist_test_100.csv", 'r')
+    test_data = test_data_file.readlines()
+    test_data_file.close()
+
+    test_success = 0
+
+    for test_sample in test_data:
+
+        # load data into array
+        sample_data = test_sample.split(',')
+
+        # first index of a line in the mnist dataset is always the label
+        sample_label = sample_data[0]
+
+        # rest of the data is the image pixels
+        sample_pixels = sample_data[1:]
+
+        # reshape the input array
+        sample_inputs = (numpy.asfarray(sample_pixels) / 255.0 * 0.99) + 0.01
+
+        # query the neural net and store the output
+        sample_outputs = neuralNetwork.query(sample_inputs)
+
+        # get the neural networks prediction
+        sample_prediction_label = numpy.argmax(sample_outputs)
+
+        #print(sample_prediction_label, sample_label)
+
+        # correct prediction
+        if int(sample_prediction_label) == int(sample_label):
+            test_success += 1
+
+    #print(test_success)
+    test_success_rate = test_success/len(test_data)
+    print('ACCURACY = ',test_success,'%')
+
+    """
+    Querying the Neural Net on self-made Images
+    """
+
     # our own image test data set
     our_own_dataset = []
 
@@ -162,11 +210,11 @@ if __name__ == "__main__":
         our_own_records += 1
         # use the filename to set the correct label
         label = int(image_file_name[-5:-4])
-        print(label, image_file_name)
-        # print('label = ',label)
+        #print(label, image_file_name)
+        #print('label = ',label)
 
         # load image data from png files into an array
-        print("loading ... ", image_file_name)
+        #print("loading ... ", image_file_name)
         img_array = imread(image_file_name, flatten=True)
 
         # reshape from 28x28 to list of 784 values, invert values
